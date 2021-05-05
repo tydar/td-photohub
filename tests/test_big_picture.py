@@ -1,5 +1,5 @@
-from big_picture import __version__
+from flask import g, session
+import pytest
 
-
-def test_version():
-    assert __version__ == '0.1.0'
+def test_hello(client, app):
+    assert client.get('/hello').status_code == 200
