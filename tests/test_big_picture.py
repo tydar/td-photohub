@@ -1,5 +1,6 @@
-from big_picture import __version__
+from big_picture import create_app
+import pytest
 
-
-def test_version():
-    assert __version__ == '0.1.0'
+@pytest.fixture
+def app():
+    pass
