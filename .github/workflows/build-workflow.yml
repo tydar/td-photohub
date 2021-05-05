@@ -1,10 +1,15 @@
-steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
-      with:
-          python-version: '3.x'
-          architecture: 'x64'
-    - name: poetry action
-      uses: abatilo/actions-poetry@v2.0.0
-    - name: run poetry --help to verify action working
-      run: poetry --help
+name: CI build
+on: [pull_request, push]
+
+jobs:
+    ci:
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-python@v2
+              with:
+                  python-version: '3.x'
+                  architecture: 'x64'
+            - name: poetry action
+              uses: abatilo/actions-poetry@v2.0.0
+            - name: run poetry --help to verify action working
+              run: poetry --help
