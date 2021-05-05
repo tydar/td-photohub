@@ -1,6 +1,5 @@
-from big_picture import create_app
+from flask import g, session
 import pytest
 
-@pytest.fixture
-def app():
-    pass
+def test_hello(client, app):
+    assert client.get('/hello').status_code == 200
