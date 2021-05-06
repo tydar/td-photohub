@@ -12,5 +12,9 @@ jobs:
                   architecture: 'x64'
             - name: poetry action
               uses: abatilo/actions-poetry@v2.0.0
-            - name: run poetry --help to verify action working
-              run: poetry --help
+            - name: poetry update
+              run: poetry update
+            - name: poetry install
+              run: poetry install
+            - name: poetry run pytest
+              run: poetry run pytest
