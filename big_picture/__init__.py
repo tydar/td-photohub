@@ -8,6 +8,7 @@ def create_app(test_config=None):
     # later add DB config details here
     app.config.from_mapping(
         SECRET_KEY='dev',
+        SQLALCHEMY_DATABASE_URI='postgresql+psycopg2://big_picture:big_picture@localhost/big_picture',
     )
 
     if test_config is None:
@@ -22,6 +23,9 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    from big_picture.models import db
+    db.init_app(app)
+
     # simple route to test setup
     @app.route('/hello')
     def hello():
@@ -29,5 +33,9 @@ def create_app(test_config=None):
 
     from . import images
     app.register_blueprint(images.bp)
+
+
+    from . import search
+    app.register_blueprint(search.bp)
 
     return app
