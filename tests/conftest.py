@@ -4,7 +4,11 @@ from big_picture import create_app
 @pytest.fixture
 def app():
     # set up DB here later
-    app = create_app({'TESTING': True,})
+    app = create_app({
+        'TESTING': True,
+        'SQLALCHEMY_DATABASE_URI': 'postgresql+psycopg2://big_picture:big_picture@localhost/big_picture_test',
+        'SQLALCHEMY_TRACK_MODIFICATIONS': False,
+    })
 
     yield app
 
