@@ -27,4 +27,7 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
 
+    from . import images
+    app.register_blueprint(images.bp)
+
     return app
