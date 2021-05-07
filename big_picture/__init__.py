@@ -9,7 +9,7 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         SQLALCHEMY_DATABASE_URI='postgresql+psycopg2://big_picture:big_picture@localhost/big_picture',
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
-        UPLOAD_FOLDER='big_picture/static/upload/'
+        UPLOAD_FOLDER='big_picture/static/upload/',
     )
 
     if test_config is None:

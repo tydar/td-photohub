@@ -55,5 +55,5 @@ def add_image():
             print(path)
             upload.save(path)
             flash('File uploaded successfully.')
-            return redirect(url_for('image_details', image_id=db_rec.id))
+            return redirect(url_for('images.image_details', image_id=db_rec.id))
     return render_template('images/add.html')

@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 # Uploaded files on development server
-big_picture/static/upload/*
+big_picture/static/upload/*.png
+tests/static/upload/*.png

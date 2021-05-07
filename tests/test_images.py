@@ -17,7 +17,20 @@ def test_gallery(client, app):
     assert client.get('/images/').status_code == 200
 
 def test_add(client, app):
-    assert client.get('/images/add').status_code == 200
+    rv = client.get('/images/add')
+    assert rv.status_code == 200
+    assert b'Upload' in rv.data
+
+    # must use 'rb' for mode to open as byte stream
+    # for upload to work as POST data
+    with open('tests/test_img.png', 'rb') as upload:
+        title = 'AUTO_TEST_TITLE'
+        post_rv = client.post(
+            '/images/add',
+            data={'title': title,  'file': upload},
+        )
+
+    assert len(Image.query.filter_by(title='AUTO_TEST_TITLE').all()) == 1
 
 def test_details(client, app):
     assert client.get('/images/1').status_code == 200
