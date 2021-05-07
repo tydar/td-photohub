@@ -1,4 +1,14 @@
 import pytest
+from big_picture.models import db
+from big_picture.models.image import Image
+
+## Test models
+
+def test_image_model(client, app):
+    with app.app_context():
+        assert len(Image.query.filter_by(title='TEST_1').all()) == 1
+
+## Test views
 
 def test_hello(client, app):
     assert client.get('/hello').status_code == 200
