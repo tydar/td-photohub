@@ -10,6 +10,7 @@ def app():
         'TESTING': True,
         'SQLALCHEMY_DATABASE_URI': 'postgresql+psycopg2://big_picture:big_picture@localhost/big_picture_test',
         'SQLALCHEMY_TRACK_MODIFICATIONS': False,
+        'UPLOAD_FOLDER': 'tests/static/upload/',
     })
 
     from big_picture.models.image import Image
