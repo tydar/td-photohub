@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Uploaded files on development server
+big_picture/static/upload/*
