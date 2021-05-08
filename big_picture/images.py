@@ -77,4 +77,6 @@ def add_image():
 
 @bp.route('/bulk', methods=['GET', 'POST'])
 def add_bulk():
+    # This controller will send the zip file to a Celery task
+    # Celery task will unzip the file, save the metadata to the DB, and store files appropriately
     return render_template('images/bulk.html')
