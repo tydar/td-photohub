@@ -1,6 +1,7 @@
 from flask import render_template, Blueprint, request
 from big_picture.models.image import Image
 import os
+from sqlalchemy import or_
 
 bp = Blueprint('search', __name__, url_prefix='/search')
 
@@ -9,7 +10,10 @@ def simple():
     if request.method == 'POST':
         search = request.form['search']
         res_list = Image.query.filter(
-            Image.title.match(search)
+            or_(
+                Image.title.match(search),
+                Image.description.match(search)
+            )
         ).all()
         path_list = []
         for res in res_list:
