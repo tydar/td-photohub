@@ -10,9 +10,6 @@ def test_image_model(client, app):
 
 ## Test views
 
-def test_hello(client, app):
-    assert client.get('/hello').status_code == 200
-
 def test_gallery(client, app):
     assert client.get('/images/').status_code == 200
 
@@ -34,4 +31,6 @@ def test_add(client, app):
     assert len(Image.query.filter_by(title='AUTO_TEST_TITLE').all()) == 1
 
 def test_details(client, app):
-    assert client.get('/images/1').status_code == 200
+    rv = client.get('/images/1')
+    assert rv.status_code == 200
+    assert b'TEST_1' in rv.data
