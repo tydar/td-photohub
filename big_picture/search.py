@@ -2,7 +2,7 @@ from flask import render_template, Blueprint
 
 bp = Blueprint('search', __name__, url_prefix='/search')
 
-@bp.route('/')
+@bp.route('/', methods=['GET', 'POST'])
 def gallery():
     return render_template('search/simple.html')
 
