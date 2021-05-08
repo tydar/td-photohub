@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %} Image details {% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+{# working with a Flask-SQLAlchemy pagination object #}
+{% for item in images.items %}
+    <div class='pagin-item'>
+        <label for='{{ item.title }}'>{{ item.title }}</label>
+        <img src='{{ url_for("static", filename=("upload/" ~ item.filename())) }}'/> </div>
+{% endfor %}
+{% if images.has_prev %}
+    <a href="{{ url_for('images.gallery', page=images.prev_num) }}">Previous page</a>
+{% endif %}
+{% if images.has_next %}
+    <a href="{{ url_for('images.gallery', page=images.next_num) }}">Next page</a>
+{% endif %}
+{% endblock %}

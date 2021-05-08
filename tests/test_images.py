@@ -11,7 +11,11 @@ def test_image_model(client, app):
 ## Test views
 
 def test_gallery(client, app):
-    assert client.get('/images/').status_code == 200
+    # wishlist: test pagination
+    rv = client.get('/images/1')
+    assert rv.status_code == 200
+    assert b'TEST_1' in rv.data
+    assert b'TEST_2' in rv.data
 
 def test_add(client, app):
     rv = client.get('/images/add')
@@ -31,6 +35,6 @@ def test_add(client, app):
     assert len(Image.query.filter_by(title='AUTO_TEST_TITLE').all()) == 1
 
 def test_details(client, app):
-    rv = client.get('/images/1')
+    rv = client.get('/images/detail/1')
     assert rv.status_code == 200
     assert b'TEST_1' in rv.data

@@ -1,4 +1,10 @@
-# Configuration notes
+# Big Picture
+
+## TODO
+
+* Refactor upload filename access to consistently use app config values and Image filename helper
+
+## Configuration notes
 
 For running regular instance:
 
