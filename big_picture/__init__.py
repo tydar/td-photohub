@@ -10,6 +10,8 @@ def create_app(test_config=None):
         SQLALCHEMY_DATABASE_URI='postgresql+psycopg2://big_picture:big_picture@localhost/big_picture',
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         UPLOAD_FOLDER='big_picture/static/upload/',
+        CELERY_BROKER_URL='redis://localhost:6379/0',
+        CELERY_RESULT_BACKEND='redis://localhost:6379/0',
     )
 
     if test_config is None:
