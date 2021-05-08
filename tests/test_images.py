@@ -42,7 +42,7 @@ def test_details(client, app):
 
 # Appears this functionality is currently working
 # But need to be able to work with different db for pytest
-@pytest.xfail
+@pytest.mark.xfail
 def test_zip_upload(client, app):
     rv = client.get('/images/bulk')
     assert rv.status_code == 200
@@ -56,4 +56,5 @@ def test_zip_upload(client, app):
             '/images/bulk',
             data={'prefix': prefix, 'file': upload},
         )
+
     assert len(Image.query.filter(Image.title.match('PRE_')).all()) == 3
