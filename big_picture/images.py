@@ -6,6 +6,7 @@ from . import celery
 
 import os
 import uuid
+import ZipFile
 
 bp = Blueprint('images', __name__, url_prefix='/images')
 
@@ -24,7 +25,7 @@ def zip_file(filename):
         filename.rsplit('.', 1)[1].lower() == 'zip'
 
 ### CELERY TASKS
-@celery.task
+@celery.task(bind=True)
 def process_zip_file(filename, task_name, prefix):
     # 1) Open ZIP file
     # 2) Iterate over images
@@ -32,7 +33,26 @@ def process_zip_file(filename, task_name, prefix):
     # 2b) Store metadata in postgres
     # 2c) Store image file in UPLOAD folder
     # 3) complete task
-    pass
+    # Possible issues in its current state:
+    # - Not tracking failed uploads
+    # - Not providing a report of what success means
+    with ZipFile(filename) as zf:
+        fn_list = zf.namelist()
+        for fn in fn_list:
+            if allowed_file(fn):
+                # We add the prefix to the title now to maintain
+                # the way that filenames are generated from Image records elsewhere
+                split_fn = fn.rsplit('.', 1)
+                title = secure_filename(prefix + split_fn[0])
+                extension = split_fn[1]
+                db_rec = Image(title=title, ext=extension)
+
+                db.session.add(db_rec)
+                db.session.commit()
+
+                filename = title + str(db_rec.id) + '.' + extension
+                path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+                upload.save(path)
 
 ### CONTROLLERS
 
@@ -112,14 +132,14 @@ def add_bulk():
             unique_fn = uuid.uuid4().hex + '.zip'
             path = os.path.join(current_app.config['UPLOAD_FOLDER'], unique_fn)
             upload.save(path)
-            process_zip_file.delay(
+            task_instance = process_zip_file.delay(
                 filename=unique_fn,
                 task_name=upload.filename,
                 prefix=request.form['prefix']
             )
-            return redirect(url_for('images.tasks'))
+            return redirect(url_for('images.task', task_id=task_instance.id))
     return render_template('images/bulk.html')
 
-@bp.route('/tasks')
+@bp.route('/task/<task_id>')
 def tasks():
     return render_template('images/tasks.html')
