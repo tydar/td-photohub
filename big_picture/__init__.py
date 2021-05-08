@@ -2,6 +2,12 @@ import os
 from flask import Flask
 from celery import Celery
 
+celery = Celery(__name__, broker='redis://localhost:6379/0')
+# TODO: create a separate configuration file so broker isn't hardcoded here
+# Note also that this configuration means that the testing instance of redis will also
+# be this instance, since this occurs prior to the test_config being loaded below
+# Discussion at https://blog.miguelgrinberg.com/post/celery-and-the-flask-application-factory-pattern
+
 def create_app(test_config=None):
     # create and configure Flask app per Flask project structure guidelines
     app = Flask(__name__, instance_relative_config=True)
@@ -31,7 +37,6 @@ def create_app(test_config=None):
     db.init_app(app)
 
     # Init celery
-    celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
     celery.conf.update(app.config)
 
     # simple route to test setup
