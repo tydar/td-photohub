@@ -26,7 +26,13 @@ def gallery():
 @bp.route('/<int:image_id>')
 def image_details(image_id):
     # Pull image by ID
-    return render_template('images/details.html')
+    image = Image.query.get_or_404(image_id)
+
+    filename = image.title + str(image.id) + '.' + image.ext
+    path = os.path.join('upload/', filename)
+    path = url_for('static', filename=path)
+
+    return render_template('images/details.html', image=image, path=path)
 
 @bp.route('/add', methods=['GET', 'POST'])
 def add_image():
