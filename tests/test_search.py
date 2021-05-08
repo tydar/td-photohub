@@ -15,6 +15,12 @@ def test_simple(client, app):
     assert b'TEST_1' in rv_post.data
 
 def test_simple_complex_desc(client, app):
+    """
+    Tests both a multi-token search and a search with whitespace.
+
+    Postgres as a backend => to_tsquery requires searches to exclude whitespace
+    """
+
     search = 'pretend THE'
     rv_post = client.post(
         '/search/',
