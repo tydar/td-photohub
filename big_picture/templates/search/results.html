@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %} Image search results {% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    {% for item in path_list %}
+        <img name="{{ item[0].title }}" src="{{ url_for('static', filename=item[1]) }}" />
+        <label for="{{ item[0].title }}">{{ item[0].title }}</label>
+    {% endfor %}
+{% endblock %}

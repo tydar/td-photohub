@@ -14,7 +14,7 @@ def app():
     })
 
     from big_picture.models.image import Image
-    test1 = Image(title='TEST_1', description='TEST_DESC_1')
+    test1 = Image(title='TEST_1', description='TEST_DESC_1', ext='jpg')
 
     with app.app_context():
         db.create_all()

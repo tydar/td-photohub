@@ -13,6 +13,7 @@ def test_simple(client, app):
     )
 
     assert b'TEST_1' in rv_post.data
+    print(rv_post.data)
 
 
 def test_advanced(client, app):

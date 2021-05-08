@@ -1,5 +1,6 @@
 from flask import render_template, Blueprint, request
 from big_picture.models.image import Image
+import os
 
 bp = Blueprint('search', __name__, url_prefix='/search')
 
@@ -8,10 +9,14 @@ def simple():
     if request.method == 'POST':
         search = request.form['search']
         res_list = Image.query.filter(
-            Image.title.match(search),
-            Image.description.match(search)
+            Image.title.match(search)
         ).all()
-        return render_template('search/results.html', res_list=res_list)
+        path_list = []
+        for res in res_list:
+            filename = res.title + str(res.id) + '.' + res.ext
+            path = os.path.join('upload/', filename)
+            path_list.append((res, path))
+        return render_template('search/results.html', path_list=path_list)
     return render_template('search/simple.html')
 
 @bp.route('/advanced')
