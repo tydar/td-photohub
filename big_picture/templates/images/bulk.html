@@ -2,19 +2,19 @@
 
 {% block content %}
     <form method=post enctype=multipart/form-data class="pure-form pure-form-aligned">
-        <label>Upload an image</label>
+        <label>Upload an archive</label>
         <fieldset>
             <div class="pure-control-group">
-                <label for='title'>Title*</label>
-                <input type='text' id='title' name='title' placeholder='Title' />
+                <label for='prefix'>Prefix*</label>
+                <input type='text' id='prefix' placeholder='Prefix' />
             </div>
-            <div class="pure-control-group">
+            {# <div class="pure-control-group">
                 <label for='desc'>Description:</label>
                 <input type='text' name='desc' id='desc' placeholder='Description' />
-            </div>
+            </div> #}
             <div class="pure-control-group">
-                <label for='file'>Image:</label>
-                <input type='file' id='file' name='file' />
+                <label for='file'>Archive:</label>
+                <input type='file' id='file' />
             </div>
             <div class="pure-controls">
                 <input class='pure-button pure-button-primary' type='submit' value='Upload' />
