@@ -21,6 +21,12 @@ def allowed_file(filename):
 ### CELERY TASKS
 @celery.task
 def process_zip_file(z_file):
+    # 1) Open ZIP file
+    # 2) Iterate over images
+    # 2a) Validate image extensions
+    # 2b) Store metadata in postgres
+    # 2c) Store image file in UPLOAD folder
+    # 3) complete task
     pass
 
 ### CONTROLLERS
