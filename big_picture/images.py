@@ -6,7 +6,7 @@ from . import celery
 
 import os
 import uuid
-import ZipFile
+from zipfile import ZipFile
 
 bp = Blueprint('images', __name__, url_prefix='/images')
 
@@ -25,7 +25,7 @@ def zip_file(filename):
         filename.rsplit('.', 1)[1].lower() == 'zip'
 
 ### CELERY TASKS
-@celery.task(bind=True)
+@celery.task()
 def process_zip_file(filename, task_name, prefix):
     # 1) Open ZIP file
     # 2) Iterate over images
@@ -52,7 +52,10 @@ def process_zip_file(filename, task_name, prefix):
 
                 filename = title + str(db_rec.id) + '.' + extension
                 path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-                upload.save(path)
+                with zf.open(fn) as file_obj:
+                    with open(path, 'wb') as write_to:
+                        write_to.write(file_obj.read())
+
 
 ### CONTROLLERS
 
@@ -132,14 +135,10 @@ def add_bulk():
             unique_fn = uuid.uuid4().hex + '.zip'
             path = os.path.join(current_app.config['UPLOAD_FOLDER'], unique_fn)
             upload.save(path)
-            task_instance = process_zip_file.delay(
-                filename=unique_fn,
-                task_name=upload.filename,
-                prefix=request.form['prefix']
-            )
+            task_instance = process_zip_file.delay(path, upload.filename, request.form['prefix'])
             return redirect(url_for('images.task', task_id=task_instance.id))
     return render_template('images/bulk.html')
 
 @bp.route('/task/<task_id>')
-def tasks():
+def task():
     return render_template('images/tasks.html')
