@@ -1,5 +1,6 @@
 import os
 from flask import Flask
+from celery import Celery
 
 def create_app(test_config=None):
     # create and configure Flask app per Flask project structure guidelines
@@ -28,6 +29,10 @@ def create_app(test_config=None):
 
     from big_picture.models import db
     db.init_app(app)
+
+    # Init celery
+    celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
+    celery.conf.update(app.config)
 
     # simple route to test setup
     @app.route('/hello')
