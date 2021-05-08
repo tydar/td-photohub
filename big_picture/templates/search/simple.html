@@ -1,13 +1,11 @@
 {% extends 'base.html' %}
 
-{% block header %}
-<h1>{% block title %} Search for an image {% endblock %}</h1>
-{% endblock %}
-
 {% block content %}
-    <form method=post>
-        <label for='search'>Title:</label>
-        <input type='text' name='search' />
-        <input type='submit' value='Submit' />
+    <form method='post' class='pure-form'>
+        <fieldset>
+            <label for='search'>Search:</label>
+            <input type='text' name='search' placeholder='Search description and title...' />
+            <input class='pure-button pure-button-primary' type='submit' value='Submit' />
+        </fieldset>
     </form>
 {% endblock %}
