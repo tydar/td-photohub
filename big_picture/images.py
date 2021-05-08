@@ -1,9 +1,10 @@
 from flask import render_template, Blueprint, flash, request, redirect, url_for, current_app
-import os
 from werkzeug.utils import secure_filename
 from big_picture.models import db
 from big_picture.models.image import Image
+from . import celery
 
+import os
 
 bp = Blueprint('images', __name__, url_prefix='/images')
 
@@ -16,6 +17,11 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+### CELERY TASKS
+@celery.task
+def process_zip_file(z_file):
+    pass
 
 ### CONTROLLERS
 
@@ -79,4 +85,16 @@ def add_image():
 def add_bulk():
     # This controller will send the zip file to a Celery task
     # Celery task will unzip the file, save the metadata to the DB, and store files appropriately
+    if request.method == 'POST':
+        # check for file attached
+        if 'file' not in request.files:
+            flash('File not attached')
+            return redirect(request.url)
+        upload = request.files['file']
+        # check that file selected
+        if upload.filename == '':
+            flash('No file selected')
+            return redirect(request.url)
+        # send file to celery task
+        process_zip_file.delay(upload)
     return render_template('images/bulk.html')
