@@ -5,7 +5,6 @@ from datetime import datetime
 
 @pytest.fixture
 def app():
-    # set up DB here later
     app = create_app({
         'TESTING': True,
         'SQLALCHEMY_DATABASE_URI': 'postgresql+psycopg2://big_picture:big_picture@localhost/big_picture_test',
@@ -14,11 +13,14 @@ def app():
     })
 
     from big_picture.models.image import Image
-    test1 = Image(title='TEST_1', description='TEST_DESC_1')
+    test1 = Image(title='TEST_1', description='TEST_DESC_1', ext='jpg')
+    comp_desc = 'This is a more complex description. Pretend the picture is a big fish.'
+    test_complex_desc = Image(title='TEST_2', description=comp_desc, ext='jpg')
 
     with app.app_context():
         db.create_all()
         db.session.add(test1)
+        db.session.add(test_complex_desc)
         db.session.commit()
 
         yield app

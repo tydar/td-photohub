@@ -47,7 +47,7 @@ def add_image():
             title = secure_filename(request.form['title'])
             extension = upload.filename.rsplit('.', 1)[1].lower()
             desc = request.form['desc']
-            db_rec = Image(title=title, description=desc)
+            db_rec = Image(title=title, description=desc, ext=extension)
             db.session.add(db_rec)
             db.session.commit()
             # db_rec has ID because change has been committed

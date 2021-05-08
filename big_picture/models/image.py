@@ -7,3 +7,4 @@ class Image(db.Model):
     upload_date = db.Column(db.DateTime, nullable=False,
                             default=datetime.utcnow)
     description = db.Column(db.String(500), nullable=True)
+    ext = db.Column(db.String(3), nullable=False)
