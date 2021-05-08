@@ -1,9 +1,10 @@
-from flask import render_template, Blueprint
+from flask import render_template, Blueprint, request
+from big_picture.models.image import Image
 
 bp = Blueprint('search', __name__, url_prefix='/search')
 
 @bp.route('/', methods=['GET', 'POST'])
-def gallery():
+def simple():
     if request.method == 'POST':
         search = request.form['search']
         res_list = Image.query.filter(
@@ -14,5 +15,5 @@ def gallery():
     return render_template('search/simple.html')
 
 @bp.route('/advanced')
-def add_image():
+def advanced():
     return render_template('search/advanced.html')
