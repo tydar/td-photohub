@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %} Image details {% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<h3>{{ image.title }}</h3>
+<p>{{ image.description }}</p>
+<p>{{ image.upload_date }}</p>
+<img src={{ path }} />
+{% endblock %}
