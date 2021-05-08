@@ -13,8 +13,15 @@ def test_simple(client, app):
     )
 
     assert b'TEST_1' in rv_post.data
-    print(rv_post.data)
 
+def test_simple_complex_desc(client, app):
+    search = 'pretend THE'
+    rv_post = client.post(
+        '/search/',
+        data = {'search': search}
+    )
+
+    assert b'TEST_2' in rv_post.data
 
 def test_advanced(client, app):
     assert client.get('/search/advanced').status_code == 200
