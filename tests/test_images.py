@@ -38,3 +38,18 @@ def test_details(client, app):
     rv = client.get('/images/detail/1')
     assert rv.status_code == 200
     assert b'TEST_1' in rv.data
+
+
+def test_zip_upload(client, app):
+    rv = client.get('/images/bulk')
+    assert rv.status_code == 200
+    assert b'Upload' in rv.data
+
+
+    # post test designed to upload a zip file containing 3 images
+    with open('tests/test_zip.zip', rb) as upload:
+        post_rv = client.post(
+            '/images/bulk',
+            data={'prefix': prefix, 'file': upload},
+        )
+    assert len(Image.query.filter_by(Image.title.match('PRE_')).all()) == 3

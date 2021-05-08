@@ -74,3 +74,7 @@ def add_image():
             flash('File uploaded successfully.')
             return redirect(url_for('images.image_details', image_id=db_rec.id))
     return render_template('images/add.html')
+
+@bp.route('/bulk', methods=['GET', 'POST'])
+def add_bulk():
+    return render_template('images/bulk.html')
