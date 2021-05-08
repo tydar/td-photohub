@@ -5,6 +5,7 @@ from big_picture.models.image import Image
 from . import celery
 
 import os
+import uuid
 
 bp = Blueprint('images', __name__, url_prefix='/images')
 
@@ -18,9 +19,13 @@ def allowed_file(filename):
     return '.' in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def zip_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() == 'zip'
+
 ### CELERY TASKS
 @celery.task
-def process_zip_file(z_file):
+def process_zip_file(filename, task_name, prefix):
     # 1) Open ZIP file
     # 2) Iterate over images
     # 2a) Validate image extensions
@@ -101,6 +106,20 @@ def add_bulk():
         if upload.filename == '':
             flash('No file selected')
             return redirect(request.url)
-        # send file to celery task
-        process_zip_file.delay(upload)
+        # 1) save file with unique filename
+        # 2) send unique filename, prefix, and original filename to celery task
+        if upload and zip_file(upload.filename):
+            unique_fn = uuid.uuid4().hex + '.zip'
+            path = os.path.join(current_app.config['UPLOAD_FOLDER'], unique_fn)
+            upload.save(path)
+            process_zip_file.delay(
+                filename=unique_fn,
+                task_name=upload.filename,
+                prefix=request.form['prefix']
+            )
+            return redirect(url_for('images.tasks'))
     return render_template('images/bulk.html')
+
+@bp.route('/tasks')
+def tasks():
+    return render_template('images/tasks.html')

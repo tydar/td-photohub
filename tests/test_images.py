@@ -48,6 +48,7 @@ def test_zip_upload(client, app):
 
     # post test designed to upload a zip file containing 3 images
     with open('tests/test_zip.zip', 'rb') as upload:
+        prefix = 'PRE_'
         post_rv = client.post(
             '/images/bulk',
             data={'prefix': prefix, 'file': upload},
