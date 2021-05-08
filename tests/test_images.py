@@ -25,9 +25,10 @@ def test_add(client, app):
     # for upload to work as POST data
     with open('tests/test_img.png', 'rb') as upload:
         title = 'AUTO_TEST_TITLE'
+        desc = 'AUTO_TEST_DESC'
         post_rv = client.post(
             '/images/add',
-            data={'title': title,  'file': upload},
+            data={'title': title, 'desc': desc, 'file': upload},
         )
 
     assert len(Image.query.filter_by(title='AUTO_TEST_TITLE').all()) == 1
