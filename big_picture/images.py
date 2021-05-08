@@ -20,10 +20,15 @@ def allowed_file(filename):
 ### CONTROLLERS
 
 @bp.route('/')
-def gallery():
-    return render_template('images/gallery.html')
+def gallery_front():
+    return redirect(url_for('images.gallery', page=1))
 
-@bp.route('/<int:image_id>')
+@bp.route('/<int:page>')
+def gallery(page=1):
+    images = Image.query.order_by(Image.upload_date.desc()).paginate(page=page, per_page=10)
+    return render_template('images/gallery.html', images=images)
+
+@bp.route('/detail/<int:image_id>')
 def image_details(image_id):
     # Pull image by ID
     image = Image.query.get_or_404(image_id)
@@ -46,6 +51,7 @@ def add_image():
         if upload.filename == '':
             flash('No file selected')
             return redirect(request.url)
+
         # check that file has an image extension
         # create record in DB for file to generate unique file name
         # save file
@@ -53,14 +59,18 @@ def add_image():
             title = secure_filename(request.form['title'])
             extension = upload.filename.rsplit('.', 1)[1].lower()
             desc = request.form['desc']
+
             db_rec = Image(title=title, description=desc, ext=extension)
+
             db.session.add(db_rec)
             db.session.commit()
+
             # db_rec has ID because change has been committed
             filename = title + str(db_rec.id) + '.' + extension
             path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
             print(path)
             upload.save(path)
+
             flash('File uploaded successfully.')
             return redirect(url_for('images.image_details', image_id=db_rec.id))
     return render_template('images/add.html')
