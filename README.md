@@ -19,8 +19,8 @@ To run a local instance of the project on the Flask development server:
 
 * Ensure there are a postgres and redis instance running on localhost that meet the requirements in the Configuaration Notes section of this document.
 * Run `poetry install`.
-* Start a celery worker. Example command from [this Miguel Grinberg blog](https://blog.miguelgrinberg.com/post/celery-and-the-flask-application-factory-pattern).
-	* `celery -A celery_worker.celery worker --loglevel=info`
+* Start a celery worker from the root directory. Example command from [this Miguel Grinberg blog](https://blog.miguelgrinberg.com/post/celery-and-the-flask-application-factory-pattern).
+	* `celery -A big_picture.celery_worker.celery worker --loglevel=info`
 * Export the env variable needed by Flask: `export FLASK_APP=big_picture`.
 * Create tables in the database: `poetry run flask utils create-db`.
 * Run the app: `poetry run flask run`.
