@@ -1,6 +1,7 @@
 import pytest
 from big_picture.models import db
 from big_picture.models.image import Image
+from big_picture.images import process_zip_file
 
 ## Test models
 
@@ -42,19 +43,15 @@ def test_details(client, app):
 
 # Appears this functionality is currently working
 # But need to be able to work with different db for pytest
-@pytest.mark.xfail
 def test_zip_upload(client, app):
     rv = client.get('/images/bulk')
     assert rv.status_code == 200
     assert b'Upload' in rv.data
-
-
-    # post test designed to upload a zip file containing 3 images
-    with open('tests/test_zip.zip', 'rb') as upload:
-        prefix = 'PRE_'
-        post_rv = client.post(
-            '/images/bulk',
-            data={'prefix': prefix, 'file': upload},
-        )
+# Attempt celery testing with pytest fixture
+# Currently fails
+@pytest.mark.xfail
+def test_process_zip_file(app, celery_worker):
+    prefix = 'PRE_'
+    process_zip_file.delay(filename='tests/test_zip.zip', task_name='test_zip.zip', prefix=prefix)
 
     assert len(Image.query.filter(Image.title.match('PRE_')).all()) == 3
