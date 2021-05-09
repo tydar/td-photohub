@@ -22,12 +22,14 @@ To run a local instance of the project on the Flask development server:
 * Start a celery worker. Example command from [this Miguel Grinberg blog](https://blog.miguelgrinberg.com/post/celery-and-the-flask-application-factory-pattern).
 	* `celery -A celery_worker.celery worker --loglevel=info`
 * Export the env variable needed by Flask: `export FLASK_APP=big_picture`.
+* Create tables in the database: `poetry run flask utils create-db`.
 * Run the app: `poetry run flask run`.
 
 ## TODO
 
 * Refactor upload filename access to consistently use app config values and Image filename helper
 * Update application configuration to support both containerized and non-containerized builds.
+* Update configuration management to allow easy use of database or cache on other hosts.
 
 ## Configuration notes
 
