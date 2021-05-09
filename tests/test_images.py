@@ -47,7 +47,6 @@ def test_zip_upload(client, app):
     rv = client.get('/images/bulk')
     assert rv.status_code == 200
     assert b'Upload' in rv.data
-
 # Attempt celery testing with pytest fixture
 # Currently fails
 @pytest.mark.xfail
