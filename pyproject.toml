@@ -10,6 +10,7 @@ Flask = "^1.1.2"
 Flask-SQLAlchemy = "^2.5.1"
 psycopg2 = "^2.8.6"
 celery = {extras = ["redis"], version = "^5.0.5"}
+pytest-celery = "^0.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

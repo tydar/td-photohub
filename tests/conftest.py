@@ -2,6 +2,7 @@ import pytest
 from big_picture import create_app
 from big_picture.models import db
 from datetime import datetime
+from big_picture import celery
 
 @pytest.fixture
 def app():
@@ -32,3 +33,14 @@ def app():
 @pytest.fixture
 def client(app):
     return app.test_client()
+
+@pytest.fixture(scope='session')
+def celery_config():
+    return {
+        'broker_url': 'redis://localhost:6379/0',
+        'result_backend': 'redis://localhost:6379/0'
+    }
+
+@pytest.fixture(scope='module')
+def celery_app(request):
+    return celery
