@@ -2,7 +2,7 @@
 
 {% block content %}
     <form method=post enctype=multipart/form-data class="pure-form pure-form-aligned">
-        <label>Upload an archive</label>
+        <p>Upload an archive.</p>
         <fieldset>
             <div class="pure-control-group">
                 <label for='prefix'>Prefix*</label>
@@ -13,7 +13,7 @@
                 <input type='text' name='desc' id='desc' placeholder='Description' />
             </div> #}
             <div class="pure-control-group">
-                <label for='file'>Archive:</label>
+                <label for='file'>Archive (.zip format only)</label>
                 <input type='file' name='file' id='file' />
             </div>
             <div class="pure-controls">
