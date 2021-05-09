@@ -2,7 +2,7 @@ import os
 from flask import Flask
 from celery import Celery
 
-celery = Celery(__name__, broker='redis://localhost:6379/0')
+celery = Celery(__name__, broker='redis://localhost:6379/0', backend='redis://localhost:6379/0')
 # TODO: create a separate configuration file so broker isn't hardcoded here
 # Note also that this configuration means that the testing instance of redis will also
 # be this instance, since this occurs prior to the test_config being loaded below

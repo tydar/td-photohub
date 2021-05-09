@@ -3,6 +3,7 @@ from werkzeug.utils import secure_filename
 from big_picture.models import db
 from big_picture.models.image import Image
 from . import celery
+from celery.result import AsyncResult
 
 import os
 import uuid
@@ -140,5 +141,10 @@ def add_bulk():
     return render_template('images/bulk.html')
 
 @bp.route('/task/<task_id>')
-def task():
-    return render_template('images/tasks.html')
+def task(task_id):
+    task = process_zip_file.AsyncResult(task_id)
+    print(task.state)
+    ready = False
+    if task.state == 'SUCCESS':
+        ready = True
+    return render_template('images/tasks.html', status=ready)
