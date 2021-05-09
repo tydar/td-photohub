@@ -38,3 +38,23 @@ def test_details(client, app):
     rv = client.get('/images/detail/1')
     assert rv.status_code == 200
     assert b'TEST_1' in rv.data
+
+
+# Appears this functionality is currently working
+# But need to be able to work with different db for pytest
+@pytest.mark.xfail
+def test_zip_upload(client, app):
+    rv = client.get('/images/bulk')
+    assert rv.status_code == 200
+    assert b'Upload' in rv.data
+
+
+    # post test designed to upload a zip file containing 3 images
+    with open('tests/test_zip.zip', 'rb') as upload:
+        prefix = 'PRE_'
+        post_rv = client.post(
+            '/images/bulk',
+            data={'prefix': prefix, 'file': upload},
+        )
+
+    assert len(Image.query.filter(Image.title.match('PRE_')).all()) == 3
