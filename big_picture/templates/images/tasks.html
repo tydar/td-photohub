@@ -1,25 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{# working with a Flask-SQLAlchemy pagination object #}
-<div class="pure-g">
-{% for item in images.items %}
-    <div class='pagin-item pure-u-1-3'>
-        <div class='l-box'>
-            <label for='{{ item.title }}'>
-                <a href='{{ url_for("images.image_details", image_id=item.id) }}'>
-                    {{ item.title }}
-                </a>
-            </label>
-            <img class='pure-img' src='{{ url_for("static", filename=("upload/" ~ item.filename())) }}'/> 
-        </div>
-    </div>
-{% endfor %}
-</div>
-{% if images.has_prev %}
-    <a href="{{ url_for('images.gallery', page=images.prev_num) }}">Previous page</a>
-{% endif %}
-{% if images.has_next %}
-    <a href="{{ url_for('images.gallery', page=images.next_num) }}">Next page</a>
+{% if status %}
+    <h3>Upload task complete! Visit the image gallery or search page to find your uploaded images.</h3>
+{% else %}
+    <h3>Your task is not complete. Refresh to check its status.</h3>
 {% endif %}
 {% endblock %}
