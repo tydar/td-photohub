@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, url_for, redirect
 from celery import Celery
 
 celery = Celery(__name__, broker='redis://localhost:6379/0', backend='redis://localhost:6379/0')
@@ -43,6 +43,10 @@ def create_app(test_config=None):
     @app.route('/hello')
     def hello():
         return 'Hello, World!'
+
+    @app.route('/')
+    def index():
+        return redirect(url_for('images.gallery_front'))
 
     from . import images
     app.register_blueprint(images.bp)
